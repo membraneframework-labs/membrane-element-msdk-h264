@@ -1,7 +1,7 @@
 defmodule Membrane.Element.Msdk.H264.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.1.0"
   @github_url "https://github.com/membraneframework/membrane-element-msdk-h264"
 
   def project do
@@ -58,9 +58,7 @@ defmodule Membrane.Element.Msdk.H264.MixProject do
       {:membrane_common_c, "~> 0.3.0"},
       {:membrane_caps_video_h264, "~> 0.1.0"},
       {:membrane_caps_video_raw, "~> 0.1.0"},
-      #{:bundlex, "~> 0.2.0"},
       {:bundlex, git: "https://github.com/membraneframework/bundlex.git", branch: "cpp_support", override: true},
-      #{:unifex, "~> 0.2.0"},
       {:unifex, git: "https://github.com/membraneframework/unifex.git", branch: "cpp_support", override: true},
       {:bunch, "~> 1.2"},
       {:membrane_element_rawvideo_parser, "~> 0.2.0", only: [:dev, :test]},
