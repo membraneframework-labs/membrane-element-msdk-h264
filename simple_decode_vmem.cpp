@@ -69,8 +69,13 @@ int main(int argc, char** argv)
         MSDK_CHECK_POINTER(fSink, MFX_ERR_NULL_PTR);
     }
 
+
+
+
+
+
     // Initialize Intel Media SDK session
-    // - MFX_IMPL_AUTO_ANY selects HW acceleration if available (on any adapter)
+    // - MFX_IMPL_AUTO_ANY selects HW acceVleration if available (on any adapter)
     // - Version 1.0 is selected for greatest backwards compatibility.
     // OS specific notes
     // - On Windows both SW and HW libraries may present
@@ -83,6 +88,10 @@ int main(int argc, char** argv)
     mfxFrameAllocator mfxAllocator;
     sts = Initialize(impl, ver, &session, &mfxAllocator);
     MSDK_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+
+
+
+
 
     // Create Media SDK decoder
     MFXVideoDECODE mfxDEC(session);
@@ -100,6 +109,11 @@ int main(int argc, char** argv)
     mfxBS.MaxLength = 1024 * 1024;
     std::vector<mfxU8> bstData(mfxBS.MaxLength);
     mfxBS.Data = bstData.data();
+
+
+
+
+
 
 
     // Read a chunk of data from stream file into bit stream buffer
