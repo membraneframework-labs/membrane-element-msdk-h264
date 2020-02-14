@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "msdk/common_utils.h"
 #include "msdk_membrane/membrane_utils.h"
 

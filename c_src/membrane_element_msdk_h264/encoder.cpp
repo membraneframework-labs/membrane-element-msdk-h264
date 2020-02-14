@@ -1,8 +1,24 @@
 #include "encoder.h"
 
-const mfxU32 MAX_FRAMES_IN_PAYLOAD = 16;
+const mfxU32 MAX_FRAMES_IN_PAYLOAD = 1;
+
+mfxStatus WriteBitStreamFrameToPayload(mfxBitstream* pMfxBitstream, UnifexEnv* env, UnifexPayload**& outFrames, int* outFramesWrittenPtr)
+{
+    if (!pMfxBitstream)
+       return MFX_ERR_NULL_PTR;
+
+    outFrames[*outFramesWrittenPtr] = unifex_payload_alloc(env, UNIFEX_PAYLOAD_SHM, pMfxBitstream->DataLength);
+    memcpy(outFrames[*outFramesWrittenPtr]->data, pMfxBitstream->Data + pMfxBitstream->DataOffset, pMfxBitstream->DataLength);
+
+    *outFramesWrittenPtr = *outFramesWrittenPtr + 1;
+    pMfxBitstream->DataLength = 0;
+
+    return MFX_ERR_NONE;
+}
 
 void handle_destroy_state(UnifexEnv* env, State* state) {
+  env = env; // Disable unused variable warning
+
   // Clean up resources
   //  - It is recommended to close Media SDK components first, before releasing allocated surfaces, since
   //    some surfaces may still be locked by internal Media SDK resources.
@@ -211,27 +227,6 @@ UNIFEX_TERM create(UnifexEnv* env, int frame_width, int frame_height, char* pix_
   return result;
 }
 
-mfxStatus WriteBitStreamFrameToPayload(mfxBitstream* pMfxBitstream, UnifexEnv* env, UnifexPayload**& outFrames, int* outFramesWrittenPtr, int* outFramesAllocatedPtr)
-{
-    if (!pMfxBitstream)
-       return MFX_ERR_NULL_PTR;
-
-    // realloc if needed
-    // if (*outFramesWrittenPtr >= (*outFramesAllocatedPtr)) {
-    //   *outFramesAllocatedPtr = *outFramesAllocatedPtr * 2;
-    //   printf("  increasing outFramesAllocated = %d\n", *outFramesAllocatedPtr);
-    //   **outFrames = (UnifexPayload*) unifex_realloc(**outFrames, (*outFramesAllocatedPtr) * sizeof(**outFrames));
-    // }
-
-    outFrames[*outFramesWrittenPtr] = unifex_payload_alloc(env, UNIFEX_PAYLOAD_SHM, pMfxBitstream->DataLength);
-    memcpy(outFrames[*outFramesWrittenPtr]->data, pMfxBitstream->Data + pMfxBitstream->DataOffset, pMfxBitstream->DataLength);
-
-    *outFramesWrittenPtr = *outFramesWrittenPtr + 1;
-    pMfxBitstream->DataLength = 0;
-
-    return MFX_ERR_NONE;
-}
-
 UNIFEX_TERM encode(UnifexEnv* env, UnifexPayload * payload, UnifexNifState* state) {
   UNIFEX_TERM response;
 
@@ -311,13 +306,11 @@ UNIFEX_TERM encode(UnifexEnv* env, UnifexPayload * payload, UnifexNifState* stat
             goto exit_encode;
           }
 
-          sts = WriteBitStreamFrameToPayload(&mfxBS, env, outFrames, outFramesWrittenPtr, outFramesAllocatedPtr);
+          sts = WriteBitStreamFrameToPayload(&mfxBS, env, outFrames, outFramesWrittenPtr);
 
           MSDK_BREAK_ON_ERROR(sts);
 
           ++nFrame;
-          //printf("Frame number: %d\r", nFrame);
-          //fflush(stdout);
       }
   }
 
@@ -353,16 +346,12 @@ UNIFEX_TERM encode(UnifexEnv* env, UnifexPayload * payload, UnifexNifState* stat
             goto exit_encode;
           }
 
-          sts = WriteBitStreamFrameToPayload(&mfxBS, env, outFrames, outFramesWrittenPtr, outFramesAllocatedPtr);
+          sts = WriteBitStreamFrameToPayload(&mfxBS, env, outFrames, outFramesWrittenPtr);
           MSDK_BREAK_ON_ERROR(sts);
 
           ++nFrame;
-          //printf("Frame number: %d\r", nFrame);
-          //fflush(stdout);
       }
   }
-
-  //printf("--- All done! outFramesWritten = %d\n", *outFramesWrittenPtr); fflush(stdout);
 
   // MFX_ERR_MORE_DATA indicates that there are no more buffered frames, exit in case of other errors
   MSDK_IGNORE_MFX_STS(sts, MFX_ERR_MORE_DATA);
@@ -402,12 +391,9 @@ UNIFEX_TERM flush(UnifexEnv* env, UnifexNifState* state) {
   //
 
   mfxStatus sts = MFX_ERR_NONE;
-  //int nEncSurfIdx = 0;
   mfxSyncPoint syncp;
   mfxU32 nFrame = 0;
 
-  //std::vector<mfxFrameSurface1>& pmfxSurfaces = *state->pmfxSurfaces;
-  //mfxFrameAllocator& mfxAllocator = *state->mfxAllocator;
   MFXVideoENCODE& mfxENC = *state->mfxENC;
   mfxBitstream& mfxBS = *state->mfxBS;
   MFXVideoSession& session = *state->session;
@@ -437,16 +423,12 @@ UNIFEX_TERM flush(UnifexEnv* env, UnifexNifState* state) {
             goto exit_flush;
           }
 
-          sts = WriteBitStreamFrameToPayload(&mfxBS, env, outFrames, outFramesWrittenPtr, outFramesAllocatedPtr);
+          sts = WriteBitStreamFrameToPayload(&mfxBS, env, outFrames, outFramesWrittenPtr);
           MSDK_BREAK_ON_ERROR(sts);
 
           ++nFrame;
-          // printf("Frame number: %d\r", nFrame);
-          // fflush(stdout);
       }
   }
-
-  //printf("--- All done! outFramesWritten = %d\n", *outFramesWrittenPtr); fflush(stdout);
 
   // MFX_ERR_MORE_DATA indicates that there are no more buffered frames, exit in case of other errors
   MSDK_IGNORE_MFX_STS(sts, MFX_ERR_MORE_DATA);

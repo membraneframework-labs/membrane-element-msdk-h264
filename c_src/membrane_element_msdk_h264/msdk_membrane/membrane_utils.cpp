@@ -100,7 +100,6 @@ mfxStatus LoadRawFrameMemory(mfxFrameSurface1* pSurface, unsigned char*& payload
     return MFX_ERR_NONE;
 }
 
-
 std::string ErrString(int err, const char* filestr, int line)
 {
     char message[256];
