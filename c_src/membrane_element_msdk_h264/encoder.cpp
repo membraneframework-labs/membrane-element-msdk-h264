@@ -2,12 +2,18 @@
 
 const mfxU32 MAX_FRAMES_IN_PAYLOAD = 1;
 
-char* ERR_PARAM_BITRATE = const_cast<char *>(std::string("Error: invalid bitrate").c_str());
-char* ERR_PARAM_WIDTH = const_cast<char *>(std::string("Error: invalid width").c_str());
-char* ERR_PARAM_HEIGHT = const_cast<char *>(std::string("Error: invalid height").c_str());
-char* ERR_PARAM_FRAMERATE_NUM = const_cast<char *>(std::string("Error: invalid framerate_num").c_str());
-char* ERR_PARAM_FRAMERATE_DENOM = const_cast<char *>(std::string("Error: invalid framerate_denom").c_str());
-char* ERR_PARAM_PIX_FMT = const_cast<char *>(std::string("Error: invalid pix_fmt").c_str());
+char *ERR_PARAM_BITRATE =
+    const_cast<char *>(std::string("Error: invalid bitrate").c_str());
+char *ERR_PARAM_WIDTH =
+    const_cast<char *>(std::string("Error: invalid width").c_str());
+char *ERR_PARAM_HEIGHT =
+    const_cast<char *>(std::string("Error: invalid height").c_str());
+char *ERR_PARAM_FRAMERATE_NUM =
+    const_cast<char *>(std::string("Error: invalid framerate_num").c_str());
+char *ERR_PARAM_FRAMERATE_DENOM =
+    const_cast<char *>(std::string("Error: invalid framerate_denom").c_str());
+char *ERR_PARAM_PIX_FMT =
+    const_cast<char *>(std::string("Error: invalid pix_fmt").c_str());
 
 mfxStatus WriteBitStreamFrameToPayload(mfxBitstream *pMfxBitstream,
                                        UnifexEnv *env,
