@@ -2,6 +2,13 @@
 
 const mfxU32 MAX_FRAMES_IN_PAYLOAD = 1;
 
+char* ERR_PARAM_BITRATE = const_cast<char *>(std::string("Error: invalid bitrate").c_str());
+char* ERR_PARAM_WIDTH = const_cast<char *>(std::string("Error: invalid width").c_str());
+char* ERR_PARAM_HEIGHT = const_cast<char *>(std::string("Error: invalid height").c_str());
+char* ERR_PARAM_FRAMERATE_NUM = const_cast<char *>(std::string("Error: invalid framerate_num").c_str());
+char* ERR_PARAM_FRAMERATE_DENOM = const_cast<char *>(std::string("Error: invalid framerate_denom").c_str());
+char* ERR_PARAM_PIX_FMT = const_cast<char *>(std::string("Error: invalid pix_fmt").c_str());
+
 mfxStatus WriteBitStreamFrameToPayload(mfxBitstream *pMfxBitstream,
                                        UnifexEnv *env,
                                        UnifexPayload **&outFrames,
@@ -55,20 +62,19 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
 
   // Validate parameters
   if (bitrate < 0) {
-    return create_result_error(env, MSDK_C_STR("Error: invalid bitrate"));
+    return create_result_error(env, ERR_PARAM_BITRATE);
   }
   if (frame_width < 1) {
-    return create_result_error(env, MSDK_C_STR("Error: invalid width"));
+    return create_result_error(env, ERR_PARAM_WIDTH);
   }
   if (frame_height < 1) {
-    return create_result_error(env, MSDK_C_STR("Error: invalid height"));
+    return create_result_error(env, ERR_PARAM_HEIGHT);
   }
   if (framerate_num < 0) {
-    return create_result_error(env, MSDK_C_STR("Error: invalid framerate_num"));
+    return create_result_error(env, ERR_PARAM_FRAMERATE_NUM);
   }
   if (framerate_denom < 0) {
-    return create_result_error(env,
-                               MSDK_C_STR("Error: invalid framerate_denom"));
+    return create_result_error(env, ERR_PARAM_FRAMERATE_DENOM);
   }
 
   mfxU16 optionsChromaFormat;
@@ -77,7 +83,7 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
   } else if (strcmp(pix_fmt, "I422") == 0) {
     optionsChromaFormat = MFX_CHROMAFORMAT_YUV422;
   } else {
-    return create_result_error(env, MSDK_C_STR("Error: invalid pix_fmt"));
+    return create_result_error(env, ERR_PARAM_PIX_FMT);
   }
 
   // Configuration parameters
