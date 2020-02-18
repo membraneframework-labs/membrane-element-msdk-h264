@@ -16,7 +16,7 @@ https://github.com/Intel-Media-SDK/MediaSDK/wiki/Intel-media-stack-on-Ubuntu
 Add the following line to your `deps` in `mix.exs`. Run `mix deps.get`.
 
 ```elixir
-{:membrane_element_msdk_h264, "~> 0.2.0"}
+{:membrane_element_msdk_h264, "~> 0.1.0"}
 ```
 
 ```bash
