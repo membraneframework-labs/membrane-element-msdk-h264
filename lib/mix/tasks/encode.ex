@@ -18,28 +18,30 @@ defmodule Mix.Tasks.Encode do
 
     start_time = DateTime.utc_now()
 
-    {:ok, pid} = Pipeline.start_link(%Pipeline.Options{
-      elements: [
-        file_src: %Element.File.Source{chunk_size: 40_960, location: in_path},
-        parser: %Element.RawVideo.Parser{width: width, height: height, format: format},
-        encoder: %Element.Msdk.H264.Encoder{bitrate: bitrate, target_usage: target_usage},
-        sink: %Element.File.Sink{location: out_path}
-      ]
-    })
+    {:ok, pid} =
+      Pipeline.start_link(%Pipeline.Options{
+        elements: [
+          file_src: %Element.File.Source{chunk_size: 40_960, location: in_path},
+          parser: %Element.RawVideo.Parser{width: width, height: height, format: format},
+          encoder: %Element.Msdk.H264.Encoder{bitrate: bitrate, target_usage: target_usage},
+          sink: %Element.File.Sink{location: out_path}
+        ]
+      })
+
     :ok = Pipeline.play(pid)
-    IO.puts "Starting encoding..."
+    IO.puts("Started encoding...")
 
     timeout = 60_000 * 60
     assert_end_of_stream(pid, :sink, :input, timeout)
 
     took_time = DateTime.diff(DateTime.utc_now(), start_time, :millisecond) / 1000
-    IO.puts "Done! Took #{took_time}s"
+    IO.puts("Done! Took #{took_time}s")
   end
 
   def run(args) do
-    IO.puts "Args:"
-    IO.inspect args
-    IO.puts "Usage:"
-    IO.puts "mix hello [width] [height] [bitrate] [in_file] [out_file]"
+    IO.puts("Args:")
+    IO.inspect(args)
+    IO.puts("Usage:")
+    IO.puts("mix hello [width] [height] [bitrate] [in_file] [out_file]")
   end
 end

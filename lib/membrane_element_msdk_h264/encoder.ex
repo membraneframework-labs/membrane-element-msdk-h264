@@ -31,16 +31,16 @@ defmodule Membrane.Element.Msdk.H264.Encoder do
   @default_target_usage :medium
 
   @list_type target_usages :: [
-              :quality,
-              :veryslow,
-              :slower,
-              :slow,
-              :medium,
-              :balanced,
-              :fast,
-              :faster,
-              :veryfast,
-              :speed
+               :quality,
+               :veryslow,
+               :slower,
+               :slow,
+               :medium,
+               :balanced,
+               :fast,
+               :faster,
+               :veryfast,
+               :speed
              ]
 
   def_options bitrate: [
@@ -99,7 +99,7 @@ defmodule Membrane.Element.Msdk.H264.Encoder do
       actions = [{:caps, caps} | bufs] ++ [redemand: :output]
       {{:ok, actions}, state}
     else
-     {:error, reason} -> {{:error, reason}, state}
+      {:error, reason} -> {{:error, reason}, state}
     end
   end
 
