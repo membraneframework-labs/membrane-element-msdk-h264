@@ -17,7 +17,7 @@ mfxStatus WriteBitStreamFrameToPayload(mfxBitstream* pMfxBitstream, UnifexEnv* e
 }
 
 void handle_destroy_state(UnifexEnv* env, State* state) {
-  env = env; // Disable unused variable warning
+  UNIFEX_UNUSED(env);
 
   // Clean up resources
   //  - It is recommended to close Media SDK components first, before releasing allocated surfaces, since
@@ -31,6 +31,7 @@ void handle_destroy_state(UnifexEnv* env, State* state) {
   delete state->pmfxSurfaces;
   delete state->mfxAllocator;
   delete state->mfxENC;
+  delete state->bstData;
   delete state->mfxBS;
   delete state->session;
 }
