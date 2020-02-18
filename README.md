@@ -41,8 +41,9 @@ Bitrate: 6000 Kbps.
 
 Encoder | Time | CPU usage
 ------- | ---- | ---------
-Membrane MSDK | 5s | 250%
-Membrane FFMpeg | 20s | 400%
+simple_simple_3_encode_vmem | 5s | 70%
+Membrane MSDK | 5s | 300%
+Membrane FFMpeg | 20s | 400% (CPU is bottleneck)
 
 ## Copyright and License
 
