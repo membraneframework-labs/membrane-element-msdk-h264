@@ -44,49 +44,4 @@ defmodule EncodingTest do
       perform_test("20-360p-I422", 480, 360, :I422)
     end
   end
-
-  @tag :skip
-  @tag :large
-  describe "Large file encoding" do
-    test "30MB Bunny" do
-      # in_path = "/home/swm/Big_Buck_Bunny_1080_10s_30MB.yuv"
-      # width = 1920
-      # height = 1080
-
-      # in_path = "/home/swm/Big_Buck_Bunny_720_10s_30MB.yuv"
-      # width = 1280
-      # height = 720
-
-      in_path = "/home/swm/Big_Buck_Bunny_360_10s_30MB.yuv"
-      width = 640
-      height = 360
-
-      out_path = "/home/swm/bunny_test.h264"
-
-      assert {:ok, pid} = make_pipeline(in_path, out_path, width, height)
-      assert Pipeline.play(pid) == :ok
-      assert_end_of_stream(pid, :sink, :input, 60_000)
-    end
-  end
-
-  @tag timeout: :infinity
-  @tag :skip
-  @tag :infinite
-  describe "Infinite create-run-delete loop" do
-    test "small raw file" do
-      in_path = "../fixtures/reference-20-360p-I422.raw" |> Path.expand(__DIR__)
-      width = 640
-      height = 360
-      out_path = "/home/swm/bunny_test.h264"
-
-      Enum.each(1..999999999, fn i ->
-        if rem(i, 10) == 0, do: IO.puts "Run #{i}"
-        assert {:ok, pid} = make_pipeline(in_path, out_path, width, height)
-        assert Pipeline.play(pid) == :ok
-        assert_end_of_stream(pid, :sink, :input, 3000)
-        Pipeline.stop_and_terminate(pid)
-        #Process.sleep(200)
-      end)
-    end
-  end
 end
