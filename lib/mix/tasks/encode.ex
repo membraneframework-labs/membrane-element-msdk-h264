@@ -16,7 +16,7 @@ defmodule Mix.Tasks.Encode do
     format = :I420
     target_usage = :medium
 
-    start_time = DateTime.utc_now() |> DateTime.to_unix()
+    start_time = DateTime.utc_now()
 
     {:ok, pid} = Pipeline.start_link(%Pipeline.Options{
       elements: [
@@ -29,9 +29,10 @@ defmodule Mix.Tasks.Encode do
     :ok = Pipeline.play(pid)
     IO.puts "Starting encoding..."
 
-    assert_end_of_stream(pid, :sink, :input, 3000)
+    timeout = 60_000 * 60
+    assert_end_of_stream(pid, :sink, :input, timeout)
 
-    took_time = (DateTime.utc_now() |> DateTime.to_unix()) - start_time
+    took_time = DateTime.diff(DateTime.utc_now(), start_time, :millisecond) / 1000
     IO.puts "Done! Took #{took_time}s"
   end
 
