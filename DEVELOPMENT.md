@@ -7,9 +7,13 @@
 - [ ] Check what happens when hardware-acceleration is not available (should return proper error from `create` method)
 - [ ] Add CI (check if hardware-acceleration is available in a container)
 - [ ] Check how much CPU is used when encoding large files using simple_3_encode_vmem sample
-- [ ] Test for memory leaks
+- [x] Test for memory leaks
+  - [x] no memory leaks on encode
+  - [x] THER ARE memory leaks on create/delete - nope, only virutal memory
+- [ ] Fix segfault on infinite pipeline create-run-delete test
 - [ ] Format code
 - [ ] Fix `c_str()` usage
+- [ ] Check what happens when encoidng multiple streams, if we won't hang on syncp 60000
 
 ## More features ideas
 
