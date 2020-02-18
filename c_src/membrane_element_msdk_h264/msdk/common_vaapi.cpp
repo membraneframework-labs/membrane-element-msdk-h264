@@ -142,6 +142,10 @@ mfxStatus CreateVAEnvDRM(mfxHDL* displayHandle)
         }
     }
     if (MFX_ERR_NONE == sts) {
+
+        // Line added over original Intel's code to silent info printf here
+        vaSetInfoCallback(m_va_dpy, NULL, NULL);
+
         va_res = vaInitialize(m_va_dpy, &major_version, &minor_version);
         sts = va_to_mfx_status(va_res);
         if (MFX_ERR_NONE != sts) {
