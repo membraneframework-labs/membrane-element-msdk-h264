@@ -79,27 +79,32 @@ defmodule Membrane.Element.Msdk.H264.Encoder do
   def handle_process(:input, %Buffer{payload: payload}, ctx, state) do
     %{encoder_ref: encoder_ref} = state
 
-    with {:ok, frames} <- Native.encode(payload, encoder_ref) do
-      bufs = wrap_frames(frames)
-      in_caps = ctx.pads.input.caps
+    case Native.encode(payload, encoder_ref) do
+      {:ok, frames} ->
+        bufs = wrap_frames(frames)
+        in_caps = ctx.pads.input.caps
 
-      caps =
-        {:output,
-         %H264{
-           alignment: :au,
-           framerate: in_caps.framerate,
-           height: in_caps.height,
-           width: in_caps.width,
-           profile: @h264_profile,
-           stream_format: :byte_stream
-         }}
+        caps =
+          {:output,
+           %H264{
+             alignment: :au,
+             framerate: in_caps.framerate,
+             height: in_caps.height,
+             width: in_caps.width,
+             profile: @h264_profile,
+             stream_format: :byte_stream
+           }}
 
-      # redemand is needed until the internal buffer of encoder is filled (no buffers will be
-      # generated before that) but it is a noop if the demand has been fulfilled
-      actions = [{:caps, caps} | bufs] ++ [redemand: :output]
-      {{:ok, actions}, state}
-    else
-      {:error, reason} -> {{:error, reason}, state}
+        # redemand is needed until the internal buffer of encoder is filled (no buffers will be
+        # generated before that) but it is a noop if the demand has been fulfilled
+        actions = [{:caps, caps} | bufs] ++ [redemand: :output]
+        {{:ok, actions}, state}
+
+      {:error, reason} ->
+        {{:error, reason}, state}
+
+      _ ->
+        {{:error, "Invalid native encode response"}, state}
     end
   end
 
@@ -107,19 +112,23 @@ defmodule Membrane.Element.Msdk.H264.Encoder do
   def handle_caps(:input, %Raw{} = caps, _ctx, state) do
     {framerate_num, framerate_denom} = caps.framerate
 
-    with {:ok, encoder_ref} <-
-           Native.create(
-             caps.width,
-             caps.height,
-             caps.format,
-             state.bitrate,
-             state.target_usage,
-             framerate_num,
-             framerate_denom
-           ) do
-      {{:ok, redemand: :output}, %{state | encoder_ref: encoder_ref}}
-    else
-      {:error, reason} -> {{:error, reason}, state}
+    case Native.create(
+           caps.width,
+           caps.height,
+           caps.format,
+           state.bitrate,
+           state.target_usage,
+           framerate_num,
+           framerate_denom
+         ) do
+      {:ok, encoder_ref} ->
+        {{:ok, redemand: :output}, %{state | encoder_ref: encoder_ref}}
+
+      {:error, reason} ->
+        {{:error, reason}, state}
+
+      _ ->
+        {{:error, "Invalid native create response"}, state}
     end
   end
 
