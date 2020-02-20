@@ -2,16 +2,6 @@
 
 const mfxU32 MAX_FRAMES_IN_PAYLOAD = 1;
 
-char *ERR_PARAM_BITRATE =
-    const_cast<char *>(std::string("Error: invalid bitrate").c_str());
-char *ERR_PARAM_WIDTH =
-    const_cast<char *>(std::string("Error: invalid width").c_str());
-char *ERR_PARAM_HEIGHT =
-    const_cast<char *>(std::string("Error: invalid height").c_str());
-char *ERR_PARAM_FRAMERATE_NUM =
-    const_cast<char *>(std::string("Error: invalid framerate_num").c_str());
-char *ERR_PARAM_FRAMERATE_DENOM =
-    const_cast<char *>(std::string("Error: invalid framerate_denom").c_str());
 char *ERR_PARAM_PIX_FMT =
     const_cast<char *>(std::string("Error: invalid pix_fmt").c_str());
 
@@ -68,19 +58,29 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
 
   // Validate parameters
   if (bitrate < 0) {
-    return create_result_error(env, ERR_PARAM_BITRATE);
+    char *err_msg =
+        const_cast<char *>(std::string("Error: invalid bitrate").c_str());
+    return create_result_error(env, err_msg);
   }
   if (frame_width < 1) {
-    return create_result_error(env, ERR_PARAM_WIDTH);
+    char *err_msg =
+        const_cast<char *>(std::string("Error: invalid width").c_str());
+    return create_result_error(env, err_msg);
   }
   if (frame_height < 1) {
-    return create_result_error(env, ERR_PARAM_HEIGHT);
+    char *err_msg =
+        const_cast<char *>(std::string("Error: invalid height").c_str());
+    return create_result_error(env, err_msg);
   }
   if (framerate_num < 0) {
-    return create_result_error(env, ERR_PARAM_FRAMERATE_NUM);
+    char *err_msg =
+        const_cast<char *>(std::string("Error: invalid framerate_num").c_str());
+    return create_result_error(env, err_msg);
   }
   if (framerate_denom < 0) {
-    return create_result_error(env, ERR_PARAM_FRAMERATE_DENOM);
+    char *err_msg = const_cast<char *>(
+        std::string("Error: invalid framerate_denom").c_str());
+    return create_result_error(env, err_msg);
   }
 
   mfxU16 optionsChromaFormat;
@@ -124,7 +124,8 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
   if (sts != MFX_ERR_NONE) {
     delete &session;
     delete &mfxAllocator;
-    return create_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    return create_result_error(env, err_msg);
   }
 
   // Create Media SDK encoder
@@ -172,7 +173,8 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
     delete &session;
     delete &mfxAllocator;
     delete &mfxENC;
-    return create_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    return create_result_error(env, err_msg);
   }
 
   // Query number of required surfaces for encoder
@@ -183,7 +185,8 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
     delete &session;
     delete &mfxAllocator;
     delete &mfxENC;
-    return create_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    return create_result_error(env, err_msg);
   }
 
   // Allocate required surfaces
@@ -194,7 +197,8 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
     delete &session;
     delete &mfxAllocator;
     delete &mfxENC;
-    return create_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    return create_result_error(env, err_msg);
   }
   mfxU16 nEncSurfNum = mfxResponse.NumFrameActual;
 
@@ -216,7 +220,8 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
     delete &mfxAllocator;
     delete &mfxENC;
     delete &pmfxSurfaces;
-    return create_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    return create_result_error(env, err_msg);
   }
 
   // Retrieve video parameters selected by encoder.
@@ -229,7 +234,8 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
     delete &mfxAllocator;
     delete &mfxENC;
     delete &pmfxSurfaces;
-    return create_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    return create_result_error(env, err_msg);
   }
 
   // Prepare Media SDK bit stream buffer
@@ -291,16 +297,17 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
 
   while (MFX_ERR_NONE <= sts || MFX_ERR_MORE_DATA == sts) {
     if (nFrame > MAX_FRAMES_IN_PAYLOAD) {
-      response = encode_result_error(
-          env, MSDK_C_STR("Error: received more than " +
-                          std::to_string(MAX_FRAMES_IN_PAYLOAD) +
-                          " frames in a single payload."));
+      char *err_msg = MSDK_C_STR("Error: received more than " +
+                                 std::to_string(MAX_FRAMES_IN_PAYLOAD) +
+                                 " frames in a single payload.");
+      response = encode_result_error(env, err_msg);
       goto exit_encode;
     }
 
     nEncSurfIdx = GetFreeSurfaceIndex(pmfxSurfaces); // Find free frame surface
     if (nEncSurfIdx == MFX_ERR_NOT_FOUND) {
-      response = encode_result_error(env, MSDK_ERR_MSG(MFX_ERR_MEMORY_ALLOC));
+      char *err_msg = MSDK_ERR_MSG(MFX_ERR_MEMORY_ALLOC);
+      response = encode_result_error(env, err_msg);
       goto exit_encode;
     }
 
@@ -342,7 +349,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
       sts = session.SyncOperation(
           syncp, 60000); // Synchronize. Wait until encoded frame is ready
       if (sts != MFX_ERR_NONE) {
-        response = encode_result_error(env, MSDK_ERR_MSG(sts));
+        char *err_msg = MSDK_ERR_MSG(sts);
+        response = encode_result_error(env, err_msg);
         goto exit_encode;
       }
 
@@ -359,7 +367,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
   // buffering loop, exit in case of other errors
   MSDK_IGNORE_MFX_STS(sts, MFX_ERR_MORE_DATA);
   if (sts != MFX_ERR_NONE) {
-    response = encode_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    response = encode_result_error(env, err_msg);
     goto exit_encode;
   }
 
@@ -402,7 +411,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
   // case of other errors
   MSDK_IGNORE_MFX_STS(sts, MFX_ERR_MORE_DATA);
   if (sts != MFX_ERR_NONE) {
-    response = encode_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    response = encode_result_error(env, err_msg);
     goto exit_encode;
   }
 
@@ -468,7 +478,8 @@ UNIFEX_TERM flush(UnifexEnv *env, UnifexNifState *state) {
       sts = session.SyncOperation(
           syncp, 60000); // Synchronize. Wait until encoded frame is ready
       if (sts != MFX_ERR_NONE) {
-        response = flush_result_error(env, MSDK_ERR_MSG(sts));
+        char *err_msg = MSDK_ERR_MSG(sts);
+        response = flush_result_error(env, err_msg);
         goto exit_flush;
       }
 
@@ -484,7 +495,8 @@ UNIFEX_TERM flush(UnifexEnv *env, UnifexNifState *state) {
   // case of other errors
   MSDK_IGNORE_MFX_STS(sts, MFX_ERR_MORE_DATA);
   if (sts != MFX_ERR_NONE) {
-    response = encode_result_error(env, MSDK_ERR_MSG(sts));
+    char *err_msg = MSDK_ERR_MSG(sts);
+    response = encode_result_error(env, err_msg);
     goto exit_flush;
   }
 
