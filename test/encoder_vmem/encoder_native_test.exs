@@ -1,6 +1,6 @@
-defmodule Encoder.NativeTest do
+defmodule Encoder.NativeVmemTest do
   use ExUnit.Case, async: true
-  alias Membrane.Element.Msdk.H264.Encoder.Native, as: Enc
+  alias Membrane.Element.Msdk.H264.EncoderVmem.Native, as: Enc
 
   test "Encode 1 240p frame" do
     in_path = "../fixtures/reference-100-240p.raw" |> Path.expand(__DIR__)

@@ -1,4 +1,4 @@
-defmodule Membrane.Element.Msdk.H264.Encoder do
+defmodule Membrane.Element.Msdk.H264.EncoderVmem do
   @moduledoc """
   Membrane element that encodes raw video frames to H264 format using
   hardware-accelerated API available for Intel® Gen graphics hardware platforms.

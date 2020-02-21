@@ -23,7 +23,7 @@ defmodule Mix.Tasks.Encode do
         elements: [
           file_src: %Element.File.Source{chunk_size: 40_960, location: in_path},
           parser: %Element.RawVideo.Parser{width: width, height: height, format: format},
-          encoder: %Element.Msdk.H264.Encoder{bitrate: bitrate, target_usage: target_usage},
+          encoder: %Element.Msdk.H264.EncoderVmem{bitrate: bitrate, target_usage: target_usage},
           sink: %Element.File.Sink{location: out_path}
         ]
       })

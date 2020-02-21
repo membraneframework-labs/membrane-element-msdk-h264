@@ -7,11 +7,11 @@ defmodule Membrane.Element.Msdk.H264.BundlexProject do
 
   def nifs(_platform) do
     [
-      encoder: [
+      encoder_vmem: [
         deps: [unifex: :unifex],
         sources: [
-          "_generated/encoder.cpp",
-          "encoder.cpp",
+          "_generated/encoder_vmem.cpp",
+          "encoder_vmem.cpp",
           "msdk/common_utils.cpp",
           "msdk/common_utils_linux.cpp",
           "msdk/common_vaapi.cpp",

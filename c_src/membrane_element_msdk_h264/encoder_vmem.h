@@ -16,4 +16,4 @@ typedef struct MyState UnifexNifState;
 
 typedef UnifexNifState State;
 
-#include "_generated/encoder.h"
+#include "_generated/encoder_vmem.h"
