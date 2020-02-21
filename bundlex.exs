@@ -19,6 +19,19 @@ defmodule Membrane.Element.Msdk.H264.BundlexProject do
         ],
         language: "cpp",
         pkg_configs: ["libavcodec", "libavutil", "libva", "libva-drm", "libmfx", "libdrm"]
+      ],
+      encodersysmem: [
+        deps: [unifex: :unifex],
+        sources: [
+          "_generated/encodersysmem.cpp",
+          "encodersysmem.cpp",
+          "msdk/common_utils.cpp",
+          "msdk/common_utils_linux.cpp",
+          "msdk/common_vaapi.cpp",
+          "msdk_membrane/membrane_utils.cpp"
+        ],
+        language: "cpp",
+        pkg_configs: ["libavcodec", "libavutil", "libva", "libva-drm", "libmfx", "libdrm"]
       ]
     ]
   end
