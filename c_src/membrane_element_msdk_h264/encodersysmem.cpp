@@ -240,6 +240,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
                    UnifexNifState *state) {
   UNIFEX_TERM response;
 
+  printf("encode_1\n");
+  fflush(stdout);
   // ===================================
   // Initialize payload
   //
@@ -267,6 +269,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
   unsigned char *payloadDataPtr = payload->data;
   unsigned char *payloadDataEndPtr = payload->data + payload->size;
 
+  printf("encode_2\n");
+  fflush(stdout);
   // ===================================
   // Stage 1: Main encoding loop
   //
@@ -328,6 +332,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
     }
   }
 
+  printf("encode_3\n");
+  fflush(stdout);
   // MFX_ERR_MORE_DATA means that the input file has ended, need to go to
   // buffering loop, exit in case of other errors
   MSDK_IGNORE_MFX_STS(sts, MFX_ERR_MORE_DATA);
@@ -337,6 +343,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
     goto exit_encode;
   }
 
+  printf("encode_31\n");
+  fflush(stdout);
   //
   // Stage 2: Retrieve the buffered encoded frames (what was left in the buffer)
   //
@@ -345,6 +353,8 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
       // Encode a frame asychronously (returns immediately)
       sts = mfxENC.EncodeFrameAsync(NULL, NULL, &mfxBS, &syncp);
 
+      printf("encode_32\n");
+      fflush(stdout);
       if (MFX_ERR_NONE < sts &&
           !syncp) { // Repeat the call if warning and no output
         if (MFX_WRN_DEVICE_BUSY == sts)
@@ -356,22 +366,36 @@ UNIFEX_TERM encode(UnifexEnv *env, UnifexPayload *payload,
         break;
     }
 
+    printf("encode_34\n");
+    fflush(stdout);
     if (MFX_ERR_NONE == sts) {
+      printf("encode_35\n");
+      fflush(stdout);
       // Synchronize. Wait until encoded frame is ready
       sts = session.SyncOperation(syncp, 60000);
+      printf("encode_36\n");
+      fflush(stdout);
       if (sts != MFX_ERR_NONE) {
+        printf("encode_37\n");
+        fflush(stdout);
         response = encode_result_error(env, MSDK_ERR_MSG(sts));
         goto exit_encode;
       }
 
+      printf("encode_38\n");
+      fflush(stdout);
       sts = WriteBitStreamFrameToPayload(&mfxBS, env, outFrames,
                                          outFramesWrittenPtr);
+      printf("encode_39\n");
+      fflush(stdout);
       MSDK_BREAK_ON_ERROR(sts);
 
       ++nFrame;
     }
   }
 
+  printf("encode_4\n");
+  fflush(stdout);
   // MFX_ERR_MORE_DATA indicates that there are no more buffered frames, exit in
   // case of other errors
   MSDK_IGNORE_MFX_STS(sts, MFX_ERR_MORE_DATA);
@@ -391,6 +415,8 @@ exit_encode:
   if (outFrames != NULL) {
     unifex_free(outFrames);
   }
+  printf("encode_5\n");
+  fflush(stdout);
   return response;
 }
 

@@ -26,11 +26,13 @@ defmodule EncodingSysmemTest do
   def perform_test(filename, width, height, format \\ :I420) do
     {in_path, out_path} = prepare_paths(filename)
 
+    IO.puts("Running pipeline")
     assert {:ok, pid} = make_pipeline(in_path, out_path, width, height, format)
     assert Pipeline.play(pid) == :ok
     assert_end_of_stream(pid, :sink, :input, 3000)
   end
 
+  @tag :dev
   describe "EncodingPipeline should" do
     test "encode 10 720p frames" do
       perform_test("10-720p", 1280, 720)
