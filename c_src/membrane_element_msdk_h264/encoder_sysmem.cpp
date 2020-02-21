@@ -1,4 +1,4 @@
-#include "encodersysmem.h"
+#include "encoder_sysmem.h"
 
 const mfxU32 MAX_FRAMES_IN_PAYLOAD = 1;
 

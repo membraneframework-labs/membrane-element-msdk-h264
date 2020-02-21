@@ -20,11 +20,11 @@ defmodule Membrane.Element.Msdk.H264.BundlexProject do
         language: "cpp",
         pkg_configs: ["libavcodec", "libavutil", "libva", "libva-drm", "libmfx", "libdrm"]
       ],
-      encodersysmem: [
+      encoder_sysmem: [
         deps: [unifex: :unifex],
         sources: [
-          "_generated/encodersysmem.cpp",
-          "encodersysmem.cpp",
+          "_generated/encoder_sysmem.cpp",
+          "encoder_sysmem.cpp",
           "msdk/common_utils.cpp",
           "msdk/common_utils_linux.cpp",
           "msdk/common_vaapi.cpp",

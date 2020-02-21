@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.EncodesysmemLoop do
+defmodule Mix.Tasks.EncodeSysmemLoop do
   import Membrane.Testing.Assertions
   alias Membrane.Element
   alias Membrane.Testing.Pipeline
@@ -26,7 +26,7 @@ defmodule Mix.Tasks.EncodesysmemLoop do
           elements: [
             file_src: %Element.File.Source{chunk_size: 40_960, location: in_path},
             parser: %Element.RawVideo.Parser{width: width, height: height, format: format},
-            encoder: %Element.Msdk.H264.Encodersysmem{
+            encoder: %Element.Msdk.H264.EncoderSysmem{
               bitrate: bitrate,
               target_usage: target_usage
             },

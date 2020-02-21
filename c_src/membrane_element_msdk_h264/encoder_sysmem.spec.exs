@@ -1,4 +1,4 @@
-module Membrane.Element.Msdk.H264.Encodersysmem.Native
+module Membrane.Element.Msdk.H264.EncoderSysmem.Native
 
 spec create(
        frame_width :: int,
