@@ -5,6 +5,7 @@
 
 struct MyState {
   std::vector<mfxFrameSurface1> *pEncSurfaces;
+  std::vector<mfxU8> *surfaceBuffersData;
   MFXVideoENCODE *mfxENC;
   mfxBitstream *mfxBS;
   MFXVideoSession *session;

@@ -35,6 +35,7 @@ void handle_destroy_state(UnifexEnv *env, State *state) {
   delete state->mfxENC;
   delete state->mfxBS;
   delete state->session;
+  delete state->surfaceBuffersData;
 }
 
 UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
@@ -230,6 +231,7 @@ UNIFEX_TERM create(UnifexEnv *env, int frame_width, int frame_height,
   state->mfxENC = &mfxENC;
   state->mfxBS = &mfxBS;
   state->session = &session;
+  state->surfaceBuffersData = &surfaceBuffersData;
   result = create_result_ok(env, state);
 
   unifex_release_state(env, state);
