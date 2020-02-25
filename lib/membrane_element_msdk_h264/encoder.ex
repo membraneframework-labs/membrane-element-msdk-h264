@@ -1,4 +1,4 @@
-defmodule Membrane.Element.Msdk.H264.EncoderVmem do
+defmodule Membrane.Element.Msdk.H264.Encoder do
   @moduledoc """
   Membrane element that encodes raw video frames to H264 format using
   hardware-accelerated API available for Intel® Gen graphics hardware platforms.
@@ -13,7 +13,7 @@ defmodule Membrane.Element.Msdk.H264.EncoderVmem do
   Please check `t:t/0` for available options.
   """
   use Membrane.Filter
-  alias __MODULE__.Native
+  alias Membrane.Element.Msdk.H264.EncoderSysmem.Native
   alias Membrane.Buffer
   alias Membrane.Caps.Video.{H264, Raw}
   use Bunch

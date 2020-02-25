@@ -17,7 +17,7 @@ defmodule EncodingTest do
       elements: [
         file_src: %Element.File.Source{chunk_size: 40_960, location: in_path},
         parser: %Element.RawVideo.Parser{width: width, height: height, format: format},
-        encoder: %Element.Msdk.H264.EncoderVmem{bitrate: 1_000, target_usage: :medium},
+        encoder: %Element.Msdk.H264.Encoder{bitrate: 1_000, target_usage: :medium},
         sink: %Element.File.Sink{location: out_path}
       ]
     })
