@@ -2,9 +2,11 @@
 
 ## To solve in version 0.1.0 before public release
 
-- [ ] Check installation instructions on fresh system
-- [ ] Check what happens when hardware-acceleration is not available (should return proper error from `create` method)
+- [ ] Verify installation instructions on a fresh Ubuntu installation
 - [ ] Add CI (check if hardware-acceleration is available in a container)
+  - the containers needs to be created with attribute `--device /dev/dri:/dev/dri`, probably can be done; https://circleci.com/docs/2.0/building-docker-images/
+  - required packages (libmfx, libva) are missing for Ubuntu 18.04, this is working Docker container for Ubuntu 19.10 https://github.com/membraneframework/docker-eoan-membrane
+- [x] Check if program doesn't crash when hardware-acceleration is not available
 - [x] Check how much CPU is used when encoding large files using simple_3_encode_vmem sample
 - [x] Craete mix task for encoding files
 - [x] Test for memory leaks
@@ -40,6 +42,8 @@ Add more configuraton encoder paremeters, see:
 ## Memory leaks
 
 ### In code based on Intel's simple_3_encode_vmem
+
+Reported here: https://github.com/Intel-Media-SDK/MediaSDK/issues/1984
 
 Tutorial project using video memory for encoding is memory leaking, see:
 
