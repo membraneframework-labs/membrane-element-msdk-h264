@@ -10,9 +10,6 @@ Documentation is available at [HexDocs](https://hexdocs.pm/membrane_element_msdk
 
 ## Installation
 
-Follow the Intel's guide to get the runtime and development environment installed:
-https://github.com/Intel-Media-SDK/MediaSDK/wiki/Intel-media-stack-on-Ubuntu
-
 Add the following line to your `deps` in `mix.exs`. Run `mix deps.get`.
 
 ```elixir
@@ -20,7 +17,7 @@ Add the following line to your `deps` in `mix.exs`. Run `mix deps.get`.
 ```
 
 ```bash
-sudo apt-get install libavcodec-dev libavformat-dev libavutil-dev
+sudo apt-get install libmfx1 libmfx-tools libva-dev libmfx-dev libavcodec-dev libavformat-dev libavutil-dev
 ```
 
 ## Supported platforms
@@ -35,15 +32,15 @@ For details check: https://github.com/intel/media-driver#supported-platformsk
 
 System: Ubuntu Intel i7-6650U CPU @ 2.20GHz (2 cores / 4 threads).
 
-Sample: Big_Buck_Bunny_1080_10s_30MB.mp4 converted to raw format (890MB) (https://test-videos.co.uk/bigbuckbunny/mp4-h264)
+Sample: [Big_Buck_Bunny_1080_10s_30MB.mp4](https://test-videos.co.uk/bigbuckbunny/mp4-h264converted) to raw format (890MB)
 
 Bitrate: 6000 Kbps.
 
 Encoder | Time | CPU usage
 ------- | ---- | ---------
-simple_simple_3_encode_vmem | 5s | 70%
-Membrane MSDK | 5s | 300%
-Membrane FFMpeg | 20s | 400% (CPU is bottleneck)
+[Intel's simple_3_encode_vmem](https://github.com/Intel-Media-SDK/MediaSDK/tree/master/tutorials/simple_3_encode_vmem) | 5s | 70%
+[Membrane Element MSDK h264](https://github.com/membraneframework/membrane-element-msdk-h264) | 5s | 300%
+[Membrane Element FFMpeg h264](https://github.com/membraneframework/membrane-element-ffmpeg-h264) | 20s | 400% (CPU bottleneck)
 
 ## Copyright and License
 
