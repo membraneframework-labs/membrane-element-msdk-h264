@@ -2,7 +2,9 @@
 
 ## To solve in version 0.1.0 before public release
 
+- [ ] Remove DEVELOPMENT.md, move this to some internal task management system
 - [ ] Verify installation instructions on a fresh Ubuntu installation
+- [ ] Move mix tasks to membrane-stress repo
 - [ ] Add CI (check if hardware-acceleration is available in a container)
   - the containers needs to be created with attribute `--device /dev/dri:/dev/dri`, probably can be done; https://circleci.com/docs/2.0/building-docker-images/
   - required packages (libmfx, libva) are missing for Ubuntu 18.04, this is working Docker container for Ubuntu 19.10 https://github.com/membraneframework/docker-eoan-membrane
@@ -10,8 +12,7 @@
 - [x] Check how much CPU is used when encoding large files using simple_3_encode_vmem sample
 - [x] Craete mix task for encoding files
 - [x] Test for memory leaks
-  - [x] no memory leaks on encode
-  - [x] THER ARE memory leaks on create/delete - nope, only virutal memory
+  - [x] Found in vmem example
 - [x] Fix segfault on infinite pipeline create-run-delete test
 - [x] Format code
 - [x] Fix `c_str()` usage
@@ -20,10 +21,10 @@
 
 ## More features ideas
 
+- Improve encoder performance: wait for X amount of frames to fill the frames buffer, before sending the job to GPU
 - Dynamically alloc space for payload (allow to return any number of frames in single `encode` method call)
-- Add decoder and a transcoding test
-  - Check if we need Parse module to extrack headers (eg. frame size) for decoder, or we can do this in decoder
-- Optimize encoder, it should use less CPU resources
+- Add decoder
+  - Decide if we need Parse module to extrack headers (eg. frame size) for decoder, or we can do this in decoder module
 - Support more encoding formats: HEVC, AVC, MPEG-2, JPEG, VP9 
 - Support more decoding formats: HEVC, AVC, VP8, VP9, MPEG-2, VC1, JPEG 
 - Support video pre-processing filters: Color Conversion, Deinterlace, Denoise, Resize, Rotate, Composition
@@ -32,9 +33,13 @@
 
 The encoder based on Intel's vmem_simple_encode sample: https://github.com/Intel-Media-SDK/MediaSDK/tree/master/tutorials/simple_3_encode_vmem
 
-Other tutotrials and sambles in https://github.com/Intel-Media-SDK/MediaSDK can be used as a base for adding more features.
+Other tutotrials and samples in can be used as a base for adding more features:
+
+  - https://github.com/Intel-Media-SDK/MediaSDK/tree/master/samples
+  - https://github.com/Intel-Media-SDK/MediaSDK/tree/master/tutorials
 
 Add more configuraton encoder paremeters, see:
+
   - docs https://github.com/Intel-Media-SDK/MediaSDK/blob/master/doc/samples/readme-encode_linux.md
   - code https://github.com/Intel-Media-SDK/MediaSDK/blob/master/samples/sample_encode/src/sample_encode.cpp
 
