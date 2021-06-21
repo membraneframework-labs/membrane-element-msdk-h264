@@ -1,7 +1,7 @@
 defmodule Membrane.Element.Msdk.H264.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
   @github_url "https://github.com/membraneframework/membrane-element-msdk-h264"
 
   def project do
@@ -70,7 +70,7 @@ defmodule Membrane.Element.Msdk.H264.MixProject do
        branch: "cpp_support",
        override: true},
       {:bunch, "~> 1.2"},
-      {:membrane_element_rawvideo_parser, "~> 0.2.0", only: [:dev, :test]},
+      {:membrane_element_rawvideo_parser, "~> 0.3.0", only: [:dev, :test]},
       {:membrane_element_file, "~> 0.3.0", only: [:dev, :test]}
     ]
   end
