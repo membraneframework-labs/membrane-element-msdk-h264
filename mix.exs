@@ -54,24 +54,15 @@ defmodule Membrane.Element.Msdk.H264.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:membrane_core,
-       branch: "unlink_bin",
-       git: "https://github.com/membraneframework/membrane-core.git",
-       override: true},
-      {:membrane_common_c, "~> 0.3.0"},
+      {:membrane_core, "~> 0.7.0"},
+      {:membrane_common_c, "~> 0.7.0"},
       {:membrane_caps_video_h264, "~> 0.1.0"},
       {:membrane_caps_video_raw, "~> 0.1.0"},
-      {:bundlex,
-       git: "https://github.com/membraneframework/bundlex.git",
-       branch: "cpp_support",
-       override: true},
-      {:unifex,
-       git: "https://github.com/membraneframework/unifex.git",
-       branch: "cpp_support",
-       override: true},
+      {:bundlex, "~> 0.4.0"},
+      {:unifex, "~> 0.4.0"},
       {:bunch, "~> 1.2"},
-      {:membrane_element_rawvideo_parser, "~> 0.3.0", only: [:dev, :test]},
-      {:membrane_element_file, "~> 0.3.0", only: [:dev, :test]}
+      {:membrane_element_rawvideo_parser, "~> 0.4.0", only: [:dev, :test]},
+      {:membrane_file_plugin, "~> 0.6.0", only: [:dev, :test]}
     ]
   end
 end
